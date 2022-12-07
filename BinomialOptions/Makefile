@@ -5,18 +5,21 @@
 
 #!/bin/bash
 
+arch := $(shell uname -m)
+ifneq ($(arch),aarch64)
 CXX=icpc
-
 CXXFLAGS=-O3 -g -restrict -fimf-domain-exclusion=31 -fimf-accuracy-bits=11 -no-prec-div -no-prec-sqrt -fno-alias -qopt-report=5 -qopt-report-phase=vec
-
-
 LDFLAGS=-lpthread -ltbbmalloc
+else
+CXX=g++
+CXXFLAGS=-O3 -fopenmp
 
-all: binomial.avx512
+endif
+all: binomial
 
-binomial.avx512: binomial_cpu.cpp binomial_main.cpp binomial.h
-	$(CXX) -std=c++14 -tbb -xCORE-AVX512 -qopenmp -qopt-report-file=binomial.avx512.optrpt $(CXXFLAGS) -o $@ $(LDFLAGS) binomial_main.cpp binomial_cpu.cpp -qopt-zmm-usage=high
+binomial: binomial_cpu.cpp binomial_main.cpp binomial.h
+	$(CXX) -std=c++14 $(CXXFLAGS) -o $@ $(LDFLAGS) binomial_main.cpp binomial_cpu.cpp  -ltbb
 
 
 clean	:
-	rm -f binomial.avx512 *.optrpt
+	rm -f binomial

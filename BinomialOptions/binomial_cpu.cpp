@@ -30,7 +30,7 @@ template<> void binomial<TPRECISION>::initialize() {}
 template<typename DataType>
 void binomial<DataType>::run()
 {
-#if _OPENMP
+#if _OPENMP && !defined(__GNUC__) 
 	kmp_set_defaults("KMP_AFFINITY=scatter,granularity=thread");
 #endif
 
