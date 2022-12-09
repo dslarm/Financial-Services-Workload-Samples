@@ -1,4 +1,7 @@
 SUBDIRS := BinomialOptions BlackScholes
 
-$(SUBDIRS):
-	$(MAKE) -C $@
+
+subdirs:
+	for dir in $(SUBDIRS); do \
+	  $(MAKE) -C $$dir ; \
+	  done
