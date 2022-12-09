@@ -6,17 +6,24 @@
 
 #!/bin/bash
 
+arch := $(shell uname -m)
+ifneq ($(arch),aarch64)
 CXX=icpc
 COMPILER_VERSION:="$(CXX)-$(shell $(CXX) --version | head -n1 | cut -d' ' -f4)"
 
 CXXFLAGS=-g -O3 -qopenmp  -fimf-precision=low -restrict -qopt-report=5  -fimf-domain-exclusion=31 -no-prec-div  -no-prec-sqrt -fno-alias \
-         -DCOMPILER_VERSION=\"$(COMPILER_VERSION)\" -qopt-report-phase=loop -qopt-report-phase=vec -vecabi=cmdtarget 
+         -DCOMPILER_VERSION=\"$(COMPILER_VERSION)\" -qopt-report-phase=loop -qopt-report-phase=vec -vecabi=cmdtarget -xCORE-AVX512 -qopt-zmm-usage=high -qopt-report-file=DP_AVX512.optrpt
+else
+CXX=g++
+CXXFLAGS=-O3 -fopenmp -g
+
+endif
 
 LDFLAGS= -ltbbmalloc
-all: BlackScholesDP.avx512 
+all: BlackScholesDP
 
-BlackScholesDP.avx512: BlackScholesDP.cpp
-	$(CXX) -xCORE-AVX512 -qopt-zmm-usage=high $(CXXFLAGS) $(LDFLAGS) -qopt-report-file=DP_AVX512.optrpt  -o $@ $^
+BlackScholesDP: BlackScholesDP.cpp
+	$(CXX)  $(CXXFLAGS)  -o $@ $^ $(LDFLAGS)  
 
 clean   :
-	rm -f *optrpt BlackScholesDP.avx512   
+	rm -f *optrpt BlackScholesDP

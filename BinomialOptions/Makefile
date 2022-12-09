@@ -12,7 +12,7 @@ CXXFLAGS=-O3 -g -restrict -fimf-domain-exclusion=31 -fimf-accuracy-bits=11 -no-p
 LDFLAGS=-lpthread -ltbbmalloc
 else
 CXX=g++
-CXXFLAGS=-O3 -fopenmp
+CXXFLAGS=-O3 -fopenmp -g
 
 endif
 all: binomial
