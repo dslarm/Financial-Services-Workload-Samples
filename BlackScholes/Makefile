@@ -12,7 +12,7 @@ CXX=icpc
 COMPILER_VERSION:="$(CXX)-$(shell $(CXX) --version | head -n1 | cut -d' ' -f4)"
 
 CXXFLAGS=-g -O3 -qopenmp  -fimf-precision=low -restrict -qopt-report=5  -fimf-domain-exclusion=31 -no-prec-div  -no-prec-sqrt -fno-alias \
-         -DCOMPILER_VERSION=\"$(COMPILER_VERSION)\" -qopt-report-phase=loop -qopt-report-phase=vec -vecabi=cmdtarget -xCORE-AVX512 -qopt-zmm-usage=high -qopt-report-file=DP_AVX512.optrpt
+         -DCOMPILER_VERSION=\"$(COMPILER_VERSION)\" -qopt-report-phase=loop -qopt-report-phase=vec -vecabi=cmdtarget -xCORE-AVX512 -qopt-zmm-usage=high -qopt-report-file=DP_AVX512.optrpt -fopenmp
 else
 CXX=g++
 CXXFLAGS=-O3 -fopenmp -g
