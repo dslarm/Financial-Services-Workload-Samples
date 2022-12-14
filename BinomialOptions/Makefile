@@ -8,7 +8,7 @@
 arch := $(shell uname -m)
 ifneq ($(arch),aarch64)
 CXX=icpc
-CXXFLAGS=-O3 -g -restrict -fimf-domain-exclusion=31 -fimf-accuracy-bits=11 -no-prec-div -no-prec-sqrt -fno-alias -qopt-report=5 -qopt-report-phase=vec
+CXXFLAGS=-O3 -g -restrict -fimf-domain-exclusion=31 -fimf-accuracy-bits=11 -no-prec-div -no-prec-sqrt -fno-alias -qopt-report=5 -qopt-report-phase=vec -fopenmp
 LDFLAGS=-lpthread -ltbbmalloc
 else
 CXX=g++
