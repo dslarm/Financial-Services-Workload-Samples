@@ -178,8 +178,8 @@ int main(int argc, char* argv[])
 #pragma distribute_point
 	    for (int chunkBase = 0; chunkBase < OptPerThread; chunkBase += CHUNKSIZE)
 	    {
-#pragma vector aligned
 #pragma omp simd 
+#pragma vector aligned
 #pragma vector nontemporal (CallResult, PutResult)
 		for(int opt = chunkBase; opt < (chunkBase+CHUNKSIZE); opt++)
 		{
