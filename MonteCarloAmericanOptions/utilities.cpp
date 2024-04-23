@@ -12,7 +12,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include <iomanip>
 #include <cmath>
 #include <cstdlib>
+#ifdef __x86_64__
 #include <mkl_vsl.h>
+#else
+#include <armpl.h>
+#endif
 #include <omp.h>
 
 #define FUZZ 0.00000001

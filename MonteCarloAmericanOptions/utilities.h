@@ -7,8 +7,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 */
 
 #pragma once
-
+#ifdef __x86_64__
 #include <mkl_vsl.h>
+#else
+#include <armpl.h>
+#endif
 
 #define REAL_BYTES 8
 

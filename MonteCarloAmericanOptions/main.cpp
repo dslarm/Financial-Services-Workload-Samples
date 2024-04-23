@@ -10,18 +10,21 @@ This file also contains problem-size definitions
 */
 
 #include "utilities.h"
+#include <stdlib.h>
 
 #include "chrono"
 #include <ctime>
-
 #include "Timer.hpp"
 #include <cmath>
 #include <cstdlib>
-#include <malloc.h>
 #include <iomanip>
 #include <iostream>
 #include <numeric>
+#ifdef __x86_64__
 #include <mkl_vsl.h>
+#else
+#include <armpl.h>
+#endif
 #include <omp.h>
 
 #define progLoops 50//*120-power
@@ -60,7 +63,7 @@ int main(int argc, char** argv)
     REAL avgPathFactor = REAL(1.0) / REAL(numPaths);
         
     REAL *cashFlowPut1;
-    cashFlowPut1 = (REAL*) memalign(64,sizeof(REAL)*(numPaths));
+    posix_memalign((void**) &cashFlowPut1, 64, sizeof(REAL)*(numPaths));
     
     #pragma omp parallel for 
     for(int i=0; i<numPaths; i++)
@@ -70,9 +73,9 @@ int main(int argc, char** argv)
     // now go back in time using regression
   
     REAL **asset;
-    asset = (REAL**) memalign(64,sizeof(REAL*)*(nStepsPlusOne));
+    posix_memalign((void**) &asset, 64, sizeof(REAL*)*(nStepsPlusOne));
     for(int i =0; i<nStepsPlusOne; i++)
-        asset[i] = (REAL *) memalign(64,sizeof(REAL)*(numPaths));
+        posix_memalign((void**) (asset + i), 64,sizeof(REAL)*(numPaths));
     
     int nthreads = 1;
     nthreads = omp_get_max_threads();

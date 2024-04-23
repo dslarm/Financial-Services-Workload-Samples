@@ -20,8 +20,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include <mathimf.h>
 #endif
 
+#ifdef __x86_64__
 #include <mkl_vsl.h>
 #include <mkl_service.h>
+#else
+#define scalable_aligned_malloc(a,b) malloc((a))
+#define scalable_aligned_free(a) free((a))
+#include <armpl.h>
+#endif
 
 /******* VERSION *******/
 #define MAJOR 1
