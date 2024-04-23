@@ -1,4 +1,15 @@
+#ifdef __x86_64__
 #include <mkl.h>
+#define ALIGN64 __declspec(align(64))
+#else
+#include <armpl.h>
+#define MKL_malloc calloc
+#define mkl_malloc calloc
+#define MKL_free free
+#define mkl_free free
+#define ALIGN64 
+
+#endif
 #include <cassert>
 #include <memory>
 
@@ -54,6 +65,7 @@ private:
     T* data;
 };
 
+template<>
 inline double* mkl_rng<double>::get_gaussian(int rngNums)
 {
     assert(buffer_size >= sizeof(double)* rngNums);
@@ -61,6 +73,7 @@ inline double* mkl_rng<double>::get_gaussian(int rngNums)
     return data;
 }
 
+template<>
 inline float* mkl_rng<float>::get_gaussian(int rngNums)
 {
     assert(buffer_size >= sizeof(float) * rngNums);

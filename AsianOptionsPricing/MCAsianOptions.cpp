@@ -44,7 +44,7 @@ static const tfloat  F_RAND_N = static_cast<tfloat>(RAND_N);
 static const tfloat STDDEV_DENOM = 1.0 / (F_RAND_N * (F_RAND_N - 1.0));
 static const tfloat CONFIDENCE_DENOM = 1.0 / std::sqrt(F_RAND_N);
 
-void* (*my_aligned_malloc)(size_t, int) = &MKL_malloc;
+void* (*my_aligned_malloc)(size_t, size_t) = &MKL_malloc;
 void (*my_aligned_free)(void*) = &MKL_free;
 
 //Simulate Spot Path
@@ -100,10 +100,10 @@ void MonteCarloTimeStep(
     double time_init = 0.0;
     double time_RNG = 0.0;
 
-    __declspec(align(64)) tfloat simStepResult[SIMSTEPS + 1][VECLEN];
-    __declspec(align(64)) tfloat volArray[SIMSTEPS + 1][VECLEN];     //Simulated Volatilities
-    __declspec(align(64)) tfloat avgMean[VECLEN];
-    __declspec(align(64)) tfloat callValue[VECLEN];
+   ALIGN64 tfloat simStepResult[SIMSTEPS + 1][VECLEN];
+   ALIGN64 tfloat volArray[SIMSTEPS + 1][VECLEN];     //Simulated Volatilities
+   ALIGN64 tfloat avgMean[VECLEN];
+   ALIGN64 tfloat callValue[VECLEN];
 
     timer<timer_enabled> tt;
     timer<timer_enabled> ttRng;
