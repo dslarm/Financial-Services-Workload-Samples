@@ -4,8 +4,11 @@ Intel Permission is hereby granted, free of charge, to any person obtaining a co
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#ifdef __x86_64__
 #include <mkl_vsl.h>
-
+#else
+#include <armpl.h>
+#endif
 void generateRand(REAL* z, int num, REAL mean, REAL stddev, int seed = 12345);
 inline void genGaussian(VSLStreamStatePtr stream, int num, double* z,
                         double mean, double stddev);

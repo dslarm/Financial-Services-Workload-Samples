@@ -16,7 +16,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include <vector>
 #include <numeric>
 #include <omp.h>
+#ifdef __x86_64__
 #include <mkl_vsl.h>
+#else
+#include <armpl.h>
+#endif
 #include <sstream>
 
 inline void genGaussian(VSLStreamStatePtr stream, int num, float* z,
