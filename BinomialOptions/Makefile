@@ -6,14 +6,18 @@
 #!/bin/bash
 
 arch := $(shell uname -m)
-ifneq ($(arch),aarch64)
+ifeq ($(arch),x86_64)
 CXX=icpc
 CXXFLAGS=-O3 -g -restrict -fimf-domain-exclusion=31 -fimf-accuracy-bits=11 -no-prec-div -no-prec-sqrt -fno-alias -qopt-report=5 -qopt-report-phase=vec -fopenmp
 LDFLAGS=-lpthread -ltbbmalloc
 else
+ifeq ($(arch),arm64)
+CXXFLAGS=-L/opt/homebrew/opt/libomp/lib -I/opt/homebrew/opt/libomp/include -lomp -Xclang -fopenmp   -I /opt/homebrew/opt/tbb/include -L /opt/homebrew/opt/tbb/lib -Wc++11-inline-namespace 
+CXX=clang++
+else
 CXX=g++
 CXXFLAGS=-O3 -fopenmp -g
-
+endif
 endif
 all: binomial
 

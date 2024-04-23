@@ -7,16 +7,21 @@
 #!/bin/bash
 
 arch := $(shell uname -m)
-ifneq ($(arch),aarch64)
+ifeq ($(arch),x86_64)
 CXX=icpc
 COMPILER_VERSION:="$(CXX)-$(shell $(CXX) --version | head -n1 | cut -d' ' -f4)"
 
 CXXFLAGS=-g -O3 -qopenmp  -fimf-precision=low -restrict -qopt-report=5  -fimf-domain-exclusion=31 -no-prec-div  -no-prec-sqrt -fno-alias \
          -DCOMPILER_VERSION=\"$(COMPILER_VERSION)\" -qopt-report-phase=loop -qopt-report-phase=vec -vecabi=cmdtarget -xCORE-AVX512 -qopt-zmm-usage=high -qopt-report-file=DP_AVX512.optrpt -fopenmp
 else
+ifeq ($(arch),arm64)
+CXXFLAGS=-std=c++11  -L/opt/homebrew/opt/libomp/lib -I/opt/homebrew/opt/libomp/include -lomp -Xclang -fopenmp   -I /opt/homebrew/opt/tbb/include -L /opt/homebrew/opt/tbb/lib -Wc++11-inline-namespace
+CXX=clang++
+else				# Linux aarch64
 CXX=g++
 CXXFLAGS=-O3 -fopenmp -g
 
+endif
 endif
 
 LDFLAGS= -ltbbmalloc
