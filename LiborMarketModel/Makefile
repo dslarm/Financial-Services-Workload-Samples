@@ -5,30 +5,27 @@
 
 #!/bin/bash
 
-arch := $(shell uname -m)
+include ../Makefile.include
 ifeq ($(arch),x86_64)
 CXX=icpc
-COMMON_FLAGS= -std=c++14 -fimf-precision=low -no-prec-div -no-prec-sqrt -vecabi=cmdtarget -qopt-report=5 -qopt-report-phase=vec  -Wall -mkl -qopt-zmm-usage=high -fimf-domain-exclusion=31 -fno-alias -qopt-assume-safe-padding -restrict -Bstatic -Wl,--start-group -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core -Wl,--end-group -Bdynamic -lpthread
+COMMON_FLAGS= -std=c++14 -fimf-precision=low -no-prec-div -no-prec-sqrt -vecabi=cmdtarget -qopt-report=5 -qopt-report-phase=vec  -Wall -mkl -qopt-zmm-usage=high -fimf-domain-exclusion=31 -fno-alias -qopt-assume-safe-padding -restrict -Bstatic -Wl,--start-group -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core -Wl,--end-group -Bdynamic -lpthread -ltbb
 CXXFLAGS=-O3 -g $COMMON_FLAGS
 LDFLAGS=-lpthread -ltbbmalloc
 else
 ifeq ($(arch),arm64)
 
-# Make will not override if these two are set outside the Makefile
-ARMPL_LIBRARIES=/opt/arm/armpl_24.04_flang-new_clang_18/lib
-ARMPL_INCLUDES=/opt/arm/armpl_24.04_flang-new_clang_18/include
-
-CXXFLAGS=-L/opt/homebrew/opt/libomp/lib -I/opt/homebrew/opt/libomp/include -lomp -Xclang -fopenmp   -I /opt/homebrew/opt/tbb/include -L /opt/homebrew/opt/tbb/lib -Wc++11-inline-namespace  -I ${ARMPL_INCLUDES} -L ${ARMPL_LIBRARIES} -larmpl
 CXX=clang++
+CXXFLAGS=-O3 -g 
+
 else
 CXX=g++
-CXXFLAGS=-O3 -fopenmp -g -L${ARMPL_LIBRARIES} -larmpl -I${ARMPL_INCLUDES} 
+CXXFLAGS=-O3 -fopenmp -g 
 endif
 endif
 all: liborgreeks
 
 liborgreeks: 
-	$(CXX) -std=c++14 ${CXXFLAGS} -o $@ ${LDFLAGS} main.cpp liborSwaptionGreeks.cpp mklRng.cpp -ltbb
+	$(CXX) -std=c++14 ${CXXFLAGS} -o $@ ${LDFLAGS} main.cpp liborSwaptionGreeks.cpp mklRng.cpp $(EXTRA_INCLUDES) $(EXTRA_LIBS)
 
 
 clean	:

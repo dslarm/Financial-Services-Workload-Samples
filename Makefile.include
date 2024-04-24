@@ -1,0 +1,20 @@
+arch := $(shell uname -m)
+ifeq ($(arch),x86_64)
+
+else
+ifeq ($(arch),arm64)
+
+# Make will not override if these two are set outside the Makefile
+ARMPL_LIBRARIES=/opt/arm/armpl_24.04_flang-new_clang_18/lib
+ARMPL_INCLUDES=/opt/arm/armpl_24.04_flang-new_clang_18/include
+
+EXTRA_INCLUDES=-I/opt/homebrew/opt/libomp/include -I /opt/homebrew/opt/tbb/include -I ${ARMPL_INCLUDES}
+EXTRA_LIBS=-L/opt/homebrew/opt/libomp/lib -lomp -Xclang -fopenmp  -L /opt/homebrew/opt/tbb/lib   -L ${ARMPL_LIBRARIES} -larmpl
+
+else
+CXX=g++
+EXTRA_INCLUDES=-I${ARMPL_INCLUDES} 
+EXTRA_LIBS=-L${ARMPL_LIBRARIES} -larmpl
+endif
+endif
+
