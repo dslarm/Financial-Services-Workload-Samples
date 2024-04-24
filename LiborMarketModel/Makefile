@@ -13,18 +13,23 @@ CXXFLAGS=-O3 -g $COMMON_FLAGS
 LDFLAGS=-lpthread -ltbbmalloc
 else
 ifeq ($(arch),arm64)
-CXXFLAGS=-L/opt/homebrew/opt/libomp/lib -I/opt/homebrew/opt/libomp/include -lomp -Xclang -fopenmp   -I /opt/homebrew/opt/tbb/include -L /opt/homebrew/opt/tbb/lib -Wc++11-inline-namespace  -I /opt/arm/armpl_24.04_flang-new_clang_18/include -L /opt/arm/armpl_24.04_flang-new_clang_18/lib -larmpl
+
+# Make will not override if these two are set outside the Makefile
+ARMPL_LIBRARIES=/opt/arm/armpl_24.04_flang-new_clang_18/lib
+ARMPL_INCLUDES=/opt/arm/armpl_24.04_flang-new_clang_18/include
+
+CXXFLAGS=-L/opt/homebrew/opt/libomp/lib -I/opt/homebrew/opt/libomp/include -lomp -Xclang -fopenmp   -I /opt/homebrew/opt/tbb/include -L /opt/homebrew/opt/tbb/lib -Wc++11-inline-namespace  -I ${ARMPL_INCLUDES} -L ${ARMPL_LIBRARIES} -larmpl
 CXX=clang++
 else
 CXX=g++
-CXXFLAGS=-O3 -fopenmp -g
+CXXFLAGS=-O3 -fopenmp -g -L${ARMPL_LIBRARIES} -larmpl -I${ARMPL_INCLUDES} 
 endif
 endif
 all: liborgreeks
 
 liborgreeks: 
-	$(CXX) -std=c++14 $(CXXFLAGS) -o $@ $(LDFLAGS) main.cpp liborSwaptionGreeks.cpp mklRng.cpp -ltbb
+	$(CXX) -std=c++14 ${CXXFLAGS} -o $@ ${LDFLAGS} main.cpp liborSwaptionGreeks.cpp mklRng.cpp -ltbb
 
 
 clean	:
-	rm -f binomial
+	rm -f liborgreeks
