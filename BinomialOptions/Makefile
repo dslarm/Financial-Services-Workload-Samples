@@ -24,7 +24,7 @@ endif
 all: binomial
 
 binomial: binomial_cpu.cpp binomial_main.cpp binomial.h
-	$(CXX) -std=c++14 $(CXXFLAGS) -o $@ $(LDFLAGS) binomial_main.cpp binomial_cpu.cpp  -ltbb
+	$(CXX) -std=c++14 $(CXXFLAGS) -o $@ $(LDFLAGS) $(EXTRA_INCLUDES) $(EXTRA_LIBS) binomial_main.cpp binomial_cpu.cpp  -ltbb
 
 
 clean	:
