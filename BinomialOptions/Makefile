@@ -5,6 +5,8 @@
 
 #!/bin/bash
 
+include ../Makefile.include
+
 arch := $(shell uname -m)
 ifeq ($(arch),x86_64)
 CXX=icpc
