@@ -1,6 +1,6 @@
 arch := $(shell uname -m)
 ifeq ($(arch),x86_64)
-EXTRA_LIBS=-lmkl_intel_ilp64 -lmkl_sequential -lmkl_core
+EXTRA_LIBS=-L/opt/intel/oneapi/tbb/latest/lib -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core
 else
 ifeq ($(arch),arm64)
 
