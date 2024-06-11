@@ -44,7 +44,7 @@ static const tfloat  F_RAND_N = static_cast<tfloat>(RAND_N);
 static const tfloat STDDEV_DENOM = 1.0 / (F_RAND_N * (F_RAND_N - 1.0));
 static const tfloat CONFIDENCE_DENOM = 1.0 / std::sqrt(F_RAND_N);
 
-void* (*my_aligned_malloc)(size_t, size_t) = &MKL_malloc;
+void* (*my_aligned_malloc)(size_t, int) = &MKL_malloc;
 void (*my_aligned_free)(void*) = &MKL_free;
 
 //Simulate Spot Path
