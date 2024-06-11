@@ -1,6 +1,6 @@
 #ifdef __x86_64__
 #include <mkl.h>
-#define ALIGN64 __declspec(align(64))
+#define ALIGN64 __attribute__ ((aligned(64)))
 #else
 #include <armpl.h>
 #define MKL_malloc calloc
