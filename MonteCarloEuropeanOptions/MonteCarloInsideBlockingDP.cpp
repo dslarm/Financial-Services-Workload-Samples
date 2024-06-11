@@ -15,7 +15,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include <ctime>
 #include <tbb/scalable_allocator.h>
 #include <omp.h>
-
+#include <math.h>
 #ifdef __INTEL_COMPILER
 #include <mathimf.h>
 #endif
